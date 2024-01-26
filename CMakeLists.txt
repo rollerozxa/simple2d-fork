@@ -20,12 +20,20 @@ include_directories(
 	${SDL2_ttf_INCLUDE_DIRS})
 
 set(LIBS
-	${SDL2_LIBRARIES}
+	SDL2::SDL2
 	${SDL2_image_LIBRARIES}
 	${SDL2_mixer_LIBRARIES}
 	${SDL2_ttf_LIBRARIES}
 	${OPENGL_LIBRARIES}
 	m)
+
+if(WIN32)
+	find_package(GLEW REQUIRED)
+
+	include_directories(${GLEW_INCLUDE_DIRS})
+
+	set(LIBS ${LIBS} ${GLEW_LIBRARIES})
+endif()
 
 file(GLOB simple2d_sources
 	src/*.c)
