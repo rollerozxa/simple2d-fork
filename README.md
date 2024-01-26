@@ -1,4 +1,9 @@
-# Welcome to Simple 2D!
+# Simple 2D fork
+
+This is a fork of [Simple2D](https://github.com/simple2d/simple2d) to fix some stuff. Whether you want to use it is up to you.
+
+---
+
 
 Simple 2D is a small, open-source graphics engine providing essential 2D drawing, media, and input capabilities. It's written in C and works across many platforms, creating native windows and interacting with hardware using [SDL](https://www.libsdl.org) while rendering content with [OpenGL](https://www.opengl.org).
 
@@ -6,157 +11,28 @@ Please note this README will be continuously updated as new features are added, 
 
 Open an issue on GitHub if you encounter any problems, have a feature request, or simply want to ask a question. Learn more about [contributing](#contributing) below.
 
-## Contents
-
-- [Getting started](#getting-started)
-  - [...on macOS](#on-macos)
-    - [iOS and tvOS](#ios-and-tvos)
-  - [...on Windows](#on-windows)
-  - [...on Linux](#on-linux)
-    - [Linux/ARM platforms](#linuxarm-platforms)
-  - [The command-line utility](#the-command-line-utility)
-- [Building from source](#building-from-source)
-- [Tests](#tests)
-- [Creating apps with Simple 2D](#creating-apps-with-simple-2d)
-  - [2D basics](#2d-basics)
-    - [The window](#the-window)
-    - [Update and render](#update-and-render)
-  - [Drawing](#drawing)
-    - [Shapes](#shapes)
-    - [Images](#images)
-    - [Sprites](#sprites)
-    - [Text](#text)
-  - [Audio](#audio)
-    - [Sounds](#sounds)
-    - [Music](#music)
-  - [Input](#input)
-    - [Keyboard](#keyboard)
-    - [Mouse](#mouse)
-    - [Game controllers](#game-controllers)
-- [Contributing](#contributing)
-- [About the project](#about-the-project)
-
----
-
-# Getting started
-
-Simple 2D supports all major operating systems and hardware platforms, and is tested on the latest releases of macOS, iOS, tvOS, Windows, Linux, and Raspbian on the Raspberry Pi.
-
-To install the [latest release](https://github.com/simple2d/simple2d/releases/latest)...
-
-## ...on macOS
-
-Use [Homebrew](http://brew.sh):
-
-```bash
-brew tap simple2d/tap
-brew install simple2d
-```
-
-### iOS and tvOS
-
-The Homebrew formula above will also install the iOS and tvOS frameworks to `/usr/local/Frameworks/Simple2D` by default. After installing, run the `simple2d simulator` command to see available options for interacting with the iOS and tvOS simulators. Run `simple2d build` to learn how to build Xcode projects with the iOS and tvOS SDKs. Example Xcode projects can be found in the [`deps` repository](https://github.com/simple2d/deps/tree/master/xcode).
-
-## ...on Windows
-
-[Download the Windows installer](https://github.com/simple2d/simple2d/releases/latest) for Visual C++ or MinGW.
-
-For MinGW, we recommend using an [MSYS2](http://www.msys2.org) environment (also available on [Chocolatey](https://chocolatey.org/packages/msys2)) along with a MinGW 64-bit command prompt (usually `mingw64.exe`). Simple 2D can also be installed on MinGW using the Linux instructions below.
-
-## ...on Linux
-
-Run the [`simple2d.sh`](bin/simple2d.sh) Bash script. Everything will be explained along the way and you'll be prompted before any action is taken. To run the script from the web, paste this snippet in your terminal:
-
-```bash
-url='https://raw.githubusercontent.com/simple2d/simple2d/master/bin/simple2d.sh'; which curl > /dev/null && cmd='curl -fsSL' || cmd='wget -qO -'; bash <($cmd $url) install
-```
-
-### Linux/ARM platforms
-
-Simple 2D supports ARM platforms running Linux, like the [Raspberry Pi](https://www.raspberrypi.org). Since most Linux distributions have SDL packages configured for traditional desktop platforms, the install script will compile SDL from source when ARM is detected, disabling windowing systems (like X11) and OpenGL (forcing OpenGL ES instead).
-
-## The command-line utility
-
-Once installed, use the `simple2d` command-line utility to update Simple 2D, check for issues, output the libraries needed to compile applications, and more. Simply run `simple2d` to see all available commands and options.
-
 # Building from source
-
-Alternatively, you can compile and install Simple 2D from source. First clone this repo using:
-
-```bash
-git clone --recursive https://github.com/simple2d/simple2d.git
-```
-
-To keep the size of this repository small, [Git submodules](https://git-scm.com/book/en/Git-Tools-Submodules) are used to reference [test media](https://github.com/simple2d/test_media) and [dependencies](https://github.com/simple2d/deps). The `--recursive` flag ensures submodules are initialize and updated when this repo is cloned. If you happened to clone this repo without the `--recursive` flag, you can still initialize and update submodules with:
+First clone this repo using:
 
 ```bash
-git submodule init
-git submodule update --remote
+git clone https://github.com/simple2d/simple2d.git
 ```
-
-Update these submodules at any time using `git submodule update --remote`
 
 Next, build and install on Unix-like systems, including Windows using MinGW, by running:
 
 ```bash
-make && make install
+mkdir build; cd build
+cmake .. -G Ninja
+ninja
 ```
-
-On Windows using Visual C++, open a 64-bit Visual Studio command prompt and run:
-
-```cmd
-nmake /f NMakefile all install
-```
-
-Note that on macOS and Linux, the makefile will not check for or install dependencies, unlike installing via Homebrew or the `simple2d.sh` script, respectively. Dependencies for Windows, supporting both Visual C++ and MinGW, _are_ included in this repo (referenced by the [`deps`](https://github.com/simple2d/deps) submodule) and installed by both makefiles.
-
-On Windows using Visual C++, Simple 2D will be installed to `%LOCALAPPDATA%\simple2d`, so make sure to add that to your path (for example with `set PATH=%PATH%;%LOCALAPPDATA%\simple2d`). In all other cases, it will be installed to `/usr/local/`. On Windows using MinGW, make sure `/usr/local/bin` is in your path as well.
-
-## Building release archives
-
-To build the release archives, which are attached as [downloads with each release](https://github.com/simple2d/simple2d/releases/latest), run `make release` on macOS and Windows using MinGW, and `nmake /f NMakefile release` on Windows using Visual C++.
 
 # Tests
-
-Simple 2D has several test programs to make sure everything is working as it should.
-
-- [`auto.c`](test/auto.c) — A set of automated unit tests for the public interface.
 - [`triangle.c`](test/triangle.c) — The "Hello Triangle" example in this README.
 - [`testcard.c`](test/testcard.c) — A graphical card, similar to [TV test cards](https://en.wikipedia.org/wiki/Test_card), with the goal of ensuring visuals and inputs are working properly.
-- [`audio.c`](test/audio.c) — Tests audio functions with various file formats interpreted as both sound samples and music.
-- [`controller.c`](test/controller.c) — Provides visual and numeric feedback of game controller input.
-- [`triangle-ios-tvos.c`](test/triangle-ios-tvos.c) — A modified `triangle.c` designed for iOS and tvOS devices.
 
 ## Building and running tests
+Enable the CMake `SIMPLE2D_TESTS` option to build tests.
 
-Run `make test`, or `nmake /f NMakefile test` on Windows using Visual C++, to compile tests to the `test/` directory. The resulting executables will have the same name as their C source files. Since media paths are set relatively in these test programs, make sure to `cd` into the `test/` directory before running a test, for example:
-
-```bash
-# On Unix-like systems
-make test && cd test/ && ./testcard
-
-# On Windows using MinGW
-make test & cd test\ & testcard.exe
-
-# On Windows using Visual C++
-nmake /f NMakefile test & cd test\ & testcard.exe
-```
-
-Each test also has a makefile target, so you can build and run tests using, for example, `make test testcard`. Or, conveniently uninstall everything, rebuild Simple 2D and tests from source, and run tests using `make rebuild <name_of_test>`, for example:
-
-```bash
-# Rebuild and run `auto.c` then `testcard.c`...
-
-# ...on Unix-like systems and Windows using MinGW
-make rebuild auto testcard
-
-# ...on Windows using Visual C++
-nmake /f NMakefile rebuild auto testcard
-```
-
-### iOS and tvOS tests
-
-To run the iOS and tvOS tests, first run `make frameworks && make install-frameworks` to build and install the iOS and tvOS frameworks. Next, run `make ios` to run the test in an iOS simulator and `make tvos` to run in a tvOS Simulator.
 
 ---
 
@@ -797,24 +673,6 @@ Despite the continuing advancements in computer graphics hardware and software, 
 If you like the project, please consider contributing! Check out the [open issues](https://github.com/simple2d/simple2d/issues) for ideas, or suggest your own. We're always looking for ways to make the project more inviting and improve the developer experience on every platform. Don't worry if you're not an expert in C or graphics APIs — we'll be happy to walk you through it all.
 
 If you _are_ a hardcore C and OS hacker, you should seriously consider contributing to [SDL](https://www.libsdl.org) so we can continue writing games without worrying about the platform details underneath. Take a look at the talks from [Steam Dev Days](http://steamcommunity.com/devdays), especially [Ryan C. Gordon's](https://twitter.com/icculus) talk on [Game Development with SDL 2.0](https://www.youtube.com/watch?v=MeMPCSqQ-34&list=UUStZs-X5W6V3TFJLnwkzN5w).
-
-## Preparing a release
-
-1. Update dependencies
-    - Update SDL versions in [`simple2d.sh`](bin/simple2d.sh)
-    - Make any updates to the `deps` repo (follow instructions [in the README](https://github.com/simple2d/deps)), and run `git submodule update --remote` in this repo to update the submodule
-2. [Run tests](#tests) on all supported platforms
-3. Update documentation to reflect the current API
-4. Update the Simple 2D version number in [`simple2d.sh`](bin/simple2d.sh) and [`simple2d.cmd`](bin/simple2d.cmd), commit changes
-5. Create Windows installers (for Visual C++ and MinGW) and Apple libraries using the `release` make/nmake target
-6. Create a [new release](https://github.com/simple2d/simple2d/releases) in GitHub, with tag in the form `v#.#.#`; attach Windows installers and Apple libraries to release notes
-7. Update the [Homebrew tap](https://github.com/simple2d/homebrew-tap):
-    - Update formula with new release archive and frameworks resource URLs
-    - Calculate the new `sha256` checksums for the release and frameworks archive, using `shasum -a 256 <file>`
-    - Run `brew audit --strict ./simple2d.rb` to detect any issues with the formula
-    - Test installation of the formula using `brew install ./simple2d.rb`
-    - Commit and push changes to the formula
-8. 🎉
 
 # About the project
 
